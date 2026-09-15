@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "npm: compile",
+      "type": "process",
+      "command": "node",
+      "args": [
+        "${workspaceFolder}/scripts/build.mjs"
+      ],
+      "group": "build",
+      "problemMatcher": "$tsc"
+    }
+  ]
+}

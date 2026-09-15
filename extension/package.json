@@ -1,0 +1,258 @@
+{
+  "name": "rigel-copilot-supervisor",
+  "displayName": "Rigel",
+  "description": "A transparent, local supervisor for cost-aware GitHub Copilot model use.",
+  "version": "0.1.0",
+  "publisher": "rigel-project",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saalim-abdulla/rigel.git",
+    "directory": "extension"
+  },
+  "homepage": "https://github.com/saalim-abdulla/rigel#readme",
+  "bugs": {
+    "url": "https://github.com/saalim-abdulla/rigel/issues"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Chat",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "copilot",
+    "cost",
+    "model",
+    "routing",
+    "supervisor"
+  ],
+  "activationEvents": [
+    "onChatParticipant:rigel.chat",
+    "onLanguageModelTool:rigel_readFile",
+    "onLanguageModelTool:rigel_listFiles",
+    "onLanguageModelTool:rigel_findFiles",
+    "onLanguageModelTool:rigel_writeFile",
+    "onLanguageModelTool:rigel_runCommand",
+    "onCommand:rigel.chooseFavoriteModel",
+    "onCommand:rigel.refreshPricing",
+    "onCommand:rigel.listModels"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "rigel.chat",
+        "name": "rigel",
+        "fullName": "Rigel",
+        "description": "Supervise a Copilot task and detect stalled progress",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "lightweight",
+            "description": "Use your favorite or the cheapest available Lightweight model"
+          },
+          {
+            "name": "versatile",
+            "description": "Use your favorite or the cheapest available Versatile model"
+          },
+          {
+            "name": "powerful",
+            "description": "Use your favorite or the cheapest available Powerful model"
+          },
+          {
+            "name": "orchestrate",
+            "description": "Create a Powerful-model task plan for approval"
+          },
+          {
+            "name": "run",
+            "description": "Approve and run the latest Rigel plan sequentially"
+          },
+          {
+            "name": "favorite",
+            "description": "Choose a favorite model for a GitHub category"
+          },
+          {
+            "name": "refresh",
+            "description": "Refresh categories and prices from GitHub's canonical source"
+          },
+          {
+            "name": "rescue",
+            "description": "Restart the last stalled task with a Powerful model"
+          },
+          {
+            "name": "why",
+            "description": "Explain the last model and supervision decision"
+          }
+        ]
+      }
+    ],
+    "languageModelTools": [
+      {
+        "name": "rigel_readFile",
+        "displayName": "Rigel: Read File",
+        "modelDescription": "Read a UTF-8 text file inside the current workspace.",
+        "canBeReferencedInPrompt": false,
+        "tags": ["rigel", "filesystem", "read"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Workspace-relative path to the file."
+            }
+          },
+          "required": ["path"]
+        }
+      },
+      {
+        "name": "rigel_listFiles",
+        "displayName": "Rigel: List Files",
+        "modelDescription": "List the direct children of a directory inside the current workspace.",
+        "canBeReferencedInPrompt": false,
+        "tags": ["rigel", "filesystem", "read"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Workspace-relative directory path, or . for the workspace root."
+            }
+          },
+          "required": ["path"]
+        }
+      },
+      {
+        "name": "rigel_findFiles",
+        "displayName": "Rigel: Find Files",
+        "modelDescription": "Find workspace files matching a glob pattern.",
+        "canBeReferencedInPrompt": false,
+        "tags": ["rigel", "filesystem", "read"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "glob": {
+              "type": "string",
+              "description": "Glob pattern such as **/*.ts."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of paths to return, from 1 to 200."
+            }
+          },
+          "required": ["glob"]
+        }
+      },
+      {
+        "name": "rigel_writeFile",
+        "displayName": "Rigel: Write File",
+        "modelDescription": "Create or replace a UTF-8 text file inside the current workspace. Requires confirmation.",
+        "canBeReferencedInPrompt": false,
+        "tags": ["rigel", "filesystem", "write"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Workspace-relative path to the file."
+            },
+            "content": {
+              "type": "string",
+              "description": "Complete UTF-8 contents of the file."
+            }
+          },
+          "required": ["path", "content"]
+        }
+      },
+      {
+        "name": "rigel_runCommand",
+        "displayName": "Rigel: Run Command",
+        "modelDescription": "Run a bounded shell command in the workspace root. Requires confirmation.",
+        "canBeReferencedInPrompt": false,
+        "tags": ["rigel", "shell", "execute"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "description": "Shell command to run in the workspace root."
+            }
+          },
+          "required": ["command"]
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "rigel.chooseFavoriteModel",
+        "title": "Rigel: Choose Favorite Model by Category"
+      },
+      {
+        "command": "rigel.refreshPricing",
+        "title": "Rigel: Refresh GitHub Model Pricing"
+      },
+      {
+        "command": "rigel.listModels",
+        "title": "Rigel: List Available Copilot Models"
+      }
+    ],
+    "configuration": {
+      "title": "Rigel",
+      "properties": {
+        "rigel.defaultCategory": {
+          "type": "string",
+          "enum": ["Lightweight", "Versatile", "Powerful"],
+          "default": "Versatile",
+          "markdownDescription": "GitHub model category used by a plain `@rigel` request. Rigel selects the favorite model for this category, or its cheapest available model."
+        },
+        "rigel.maxToolActions": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 30,
+          "default": 30,
+          "description": "Maximum tool actions before Rigel asks the current model to finish without more tools. Repetition and error loops can still trigger escalation earlier."
+        },
+        "rigel.repeatedActionLimit": {
+          "type": "number",
+          "minimum": 2,
+          "maximum": 10,
+          "default": 3,
+          "description": "Number of equivalent tool calls that triggers the circuit breaker."
+        },
+        "rigel.repeatedErrorLimit": {
+          "type": "number",
+          "minimum": 2,
+          "maximum": 10,
+          "default": 2,
+          "description": "Number of equivalent tool errors that triggers the circuit breaker."
+        },
+        "rigel.favoriteModels": {
+          "type": "object",
+          "default": {},
+          "properties": {
+            "Lightweight": { "type": "string" },
+            "Versatile": { "type": "string" },
+            "Powerful": { "type": "string" }
+          },
+          "additionalProperties": false,
+          "markdownDescription": "Favorite Copilot model ID for each GitHub category. Use **Rigel: Choose Favorite Model by Category** to configure this interactively."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "sync-pricing": "node scripts/sync-pricing.mjs",
+    "compile": "node scripts/build.mjs",
+    "test": "node scripts/build.mjs && node out/test/run.js",
+    "vscode:prepublish": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "yaml": "2.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.0",
+    "@types/vscode": "1.95.0",
+    "typescript": "5.4.5"
+  }
+}

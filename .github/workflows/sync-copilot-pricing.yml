@@ -1,0 +1,59 @@
+name: Sync Copilot pricing
+
+on:
+  schedule:
+    - cron: "17 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install project
+        run: python -m pip install .
+      - name: Regenerate normalized pricing
+        run: rigel-sync
+      - name: Sync extension pricing catalog
+        run: node extension/scripts/sync-pricing.mjs
+      - name: Validate extension pricing and routing
+        run: npm ci --prefix extension && npm test --prefix extension
+      - name: Open a pull request when pricing changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- data extension/resources/copilot-pricing.json; then
+            echo "No pricing changes detected."
+            exit 0
+          fi
+
+          branch="automation/copilot-pricing"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$branch"
+          git add data extension/resources/copilot-pricing.json
+          git commit -m "Update Copilot model pricing"
+          git push --force origin "HEAD:$branch"
+
+          if gh pr view "$branch" >/dev/null 2>&1; then
+            echo "Updated the existing pricing pull request."
+          else
+            gh pr create \
+              --title "Update Copilot model pricing" \
+              --body "GitHub's published Copilot pricing table changed. This PR refreshes the normalized outputs and the pricing catalog bundled with the VS Code extension." \
+              --base "${GITHUB_REF_NAME}" \
+              --head "$branch"
+          fi
