@@ -2,7 +2,7 @@
 
 Prices are USD per 1 million tokens. Missing or inapplicable prices are shown as `—`.
 Source: [`github/docs` pricing YAML](https://raw.githubusercontent.com/github/docs/main/data/tables/copilot/models-and-pricing.yml)
-Source SHA-256: `b7fb21001f939dd8771be19257d3676dc053b5568f96cffe1cbe95465bcdca9c`
+Source SHA-256: `5102545cdc2cc19a71a648c47c259c0281794836ba49eb6fb6170aeb57cb2fd8`
 
 | Provider | Model | Status | Category | Tier | Input threshold | Input | Cached input | Cache write | Output |
 | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
@@ -36,7 +36,6 @@ Source SHA-256: `b7fb21001f939dd8771be19257d3676dc053b5568f96cffe1cbe95465bcdca9
 | google | Gemini 3.6 Flash | GA | Versatile | Default | — | $0.75 | $0.075 | — | $3.75 |
 | google | Gemini 3.7 Flash | GA | Versatile | Default | — | $0.75 | $0.075 | — | $3.75 |
 | google | Gemini 3.8 Flash | GA | Versatile | Default | — | $0.75 | $0.075 | — | $3.75 |
-| microsoft | MAI-Code-1-Flash | GA | Lightweight | Default | — | $0.75 | $0.075 | — | $4.5 |
 | microsoft | MAI-Code-1.1-Flash | GA | Lightweight | Default | — | $0.2 | $0.02 | — | $1.2 |
 | xai | Grok 4.5 | GA | Versatile | Default | ≤ 200K | $2 | $0.5 | — | $6 |
 | xai | Grok 4.5 | GA | Versatile | Long context | > 200K | $4 | $1 | — | $12 |

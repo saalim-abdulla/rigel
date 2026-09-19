@@ -29,7 +29,6 @@ google,Gemini 3.5 Flash,GA,Lightweight,Default,,,1.5,0.15,,9.0,
 google,Gemini 3.6 Flash,GA,Versatile,Default,,,0.75,0.075,,3.75,Upstream footnote: gemini-flash-promo
 google,Gemini 3.7 Flash,GA,Versatile,Default,,,0.75,0.075,,3.75,Upstream footnote: gemini-flash-promo
 google,Gemini 3.8 Flash,GA,Versatile,Default,,,0.75,0.075,,3.75,Upstream footnote: gemini-flash-promo
-microsoft,MAI-Code-1-Flash,GA,Lightweight,Default,,,0.75,0.075,,4.5,
 microsoft,MAI-Code-1.1-Flash,GA,Lightweight,Default,,,0.2,0.02,,1.2,
 xai,Grok 4.5,GA,Versatile,Default,lte,200000,2.0,0.5,,6.0,
 xai,Grok 4.5,GA,Versatile,Long context,gt,200000,4.0,1.0,,12.0,
